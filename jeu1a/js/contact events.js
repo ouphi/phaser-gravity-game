@@ -50,6 +50,16 @@ function launchGame(){
     var temps = 0;
 
     function create() {
+
+        //add key
+
+         key1 = game.input.keyboard.addKey(Phaser.Keyboard.D);
+    key1.onDown.add(moveHadoop, this);
+
+
+
+    game.input.keyboard.removeKeyCapture(Phaser.Keyboard.D);
+
     //  Enable p2 physics
     game.physics.startSystem(Phaser.Physics.P2JS);
     game.physics.p2.restitution = 0.1;
@@ -256,6 +266,12 @@ function dragElements(elements)
                 }
             }
         }
+}
+
+
+function moveHadoop()
+{
+    hadoop1.body.moveRight(500);
 }
 
 
