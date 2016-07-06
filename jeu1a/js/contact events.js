@@ -137,6 +137,8 @@ game.debug.text(result, 400, 400);
 temps = Math.round(this.game.time.totalElapsedSeconds()*100)/100
 game.debug.text('Time: ' + temps, 32, 32);
 
+game.debug.text(point, 600, 500);
+
 }
 
 
@@ -158,6 +160,8 @@ game.debug.text('Time: ' + temps, 32, 32);
         if(body.sprite.key == 'hadoopblock1')
         {
             result = 'INDICE';
+            point = 'Vous avez gagné ' + Math.round((1/temps) * 100) + 'points'
+
     
         }
     }
