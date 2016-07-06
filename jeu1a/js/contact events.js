@@ -48,7 +48,8 @@ function launchGame(){
     var result = '';
     var point = '';
     var temps = 0;
-function create() {
+
+    function create() {
     //  Enable p2 physics
     game.physics.startSystem(Phaser.Physics.P2JS);
     game.physics.p2.restitution = 0.1;
@@ -95,8 +96,6 @@ function create() {
     level1.body.loadPolygon('physicsData', 'level1');
     level1.body.static = true;
 
-
-
     wizball.body.setCircle(15);
     wizball.body.static = true;
 
@@ -127,8 +126,9 @@ function create() {
     tetrisT.input.enableDrag(true);
     tetrisT.events.onDragStart.add(function(){startDrag(tetrisT)}, this);
     tetrisT.events.onDragStop.add(function(){stopDrag(tetrisT)}, this);
-     wizball.body.onBeginContact.add(blockHit, this);
+    wizball.body.onBeginContact.add(blockHit, this);
 
+    wizball.body.onBeginContact.add(function(body, bodyB) {removeBlockT(body,tetris1,tetrisT)}, this);
 
 }
 
@@ -178,6 +178,47 @@ game.debug.text(point, 600, 500);
 
 }
 
+function removeBlockT(body, target1, target2) {
+
+    if(body)
+    {
+        if(body.sprite.key == target1.body.sprite.key)
+        {
+            target2.kill();
+        }
+
+    }
+
+}
+
+function dragElements(elements)
+{
+        for (var i in elements) {
+        //console.log('elements :' + elements[i]);
+
+        if( elements[i].input.isDragged ){
+                //BODY => follow pointer
+                if( elements[i].body != null ){
+                    elements[i].body.x = game.input.activePointer.worldX;
+                    elements[i].body.y = game.input.activePointer.worldY;
+
+                    if(cursors.left.isDown)
+                    {
+                        elements[i].body.rotateLeft(100);
+
+                    } 
+                    else if(cursors.right.isDown)
+                    {
+                        elements[i].body.rotateRight(100);
+                        
+                    }
+                    else elements[i].body.rotateLeft(0);
+
+                }
+            }
+        }
+}
+
 
 
 
@@ -194,62 +235,12 @@ function update() {
 
     game.input.onDown.add(gofull, this);
 
-wizball.body.onBeginContact.add(blockHit, this);
+    wizball.body.onBeginContact.add(blockHit, this);
     wizball.body.moves = false;
 
-    //tetrisT.body.setZeroVelocity();
 
-
-    if( tetris1.input.isDragged ){
-                //BODY => follow pointer
-                if( tetris1.body != null ){
-                    tetris1.body.x = game.input.activePointer.worldX;
-                    tetris1.body.y = game.input.activePointer.worldY;
-
-                }
-            }
-
-            if( tetrisT.input.isDragged ){
-                //BODY => follow pointer
-                if( tetrisT.body != null ){
-                    tetrisT.body.x = game.input.activePointer.worldX;
-                    tetrisT.body.y = game.input.activePointer.worldY;
-
-                    if(cursors.left.isDown)
-                        {
-                            tetrisT.body.rotateLeft(100);
-                            
-                        } 
-                    else if(cursors.right.isDown)
-                    {
-                        tetrisT.body.rotateRight(100);
-                        
-                    }
-                    else tetrisT.body.rotateLeft(0);
-
-                }
-            }
-
-
-
-   /* if (cursors.left.isDown)
-    {
-        block.body.moveLeft(200);
-    }
-    else if (cursors.right.isDown)
-    {
-        block.body.moveRight(200);
-    }
-
-    if (cursors.up.isDown)
-    {
-        block.body.moveUp(200);
-    }
-    else if (cursors.down.isDown)
-    {
-        //block.body.moveDown(200);
-        wizball.body.static = false;
-    }*/
+    dragElements([tetris1, tetrisT]);
+   
 
     if (cursors.down.isDown)
     {
@@ -258,11 +249,7 @@ wizball.body.onBeginContact.add(blockHit, this);
         tetrisT.body.static =true;
         wizball.body.static = false;
         tetrisT.body.static =true;
-
-
     }
-
-
 }
 
     setTimeout(function(){
@@ -278,4 +265,3 @@ wizball.body.onBeginContact.add(blockHit, this);
     }, 100);
 
 }
-
