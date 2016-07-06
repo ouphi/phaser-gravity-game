@@ -214,8 +214,23 @@ wizball.body.onBeginContact.add(blockHit, this);
                 if( tetrisT.body != null ){
                     tetrisT.body.x = game.input.activePointer.worldX;
                     tetrisT.body.y = game.input.activePointer.worldY;
+
+                    if(cursors.left.isDown)
+                        {
+                            tetrisT.body.rotateLeft(50);
+                            
+                        } 
+                    else if(cursors.right.isDown)
+                    {
+                        tetrisT.body.rotateRight(50);
+                        
+                    }
+                    else tetrisT.body.rotateLeft(0);
+
                 }
             }
+
+
 
    /* if (cursors.left.isDown)
     {
