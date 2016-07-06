@@ -1,6 +1,6 @@
 var game;
 function fullScreenAndLaunchGame() {
-	$("body > *").remove();
+    $("body > *").remove();
     launchGame();
 }
 
@@ -9,7 +9,7 @@ function launchGame(){
     var height = 720;
 
 
-        game = new Phaser.Game(width, height, Phaser.AUTO, 'jeu', { preload: preload, create: create, update: update });
+        game = new Phaser.Game(width, height, Phaser.AUTO, 'jeu', { preload: preload, create: create, update: update, render: render });
         var ball;
                 
         function preload () {
@@ -45,7 +45,9 @@ function launchGame(){
             console.log('stopdrag');
         }
 
-
+    var result = '';
+    var point = '';
+    var temps = 0;
 function create() {
     //  Enable p2 physics
     game.physics.startSystem(Phaser.Physics.P2JS);
@@ -125,6 +127,40 @@ function create() {
     tetrisT.input.enableDrag(true);
     tetrisT.events.onDragStart.add(startDrag(tetrisT), this);
     tetrisT.events.onDragStop.add(stopDrag(tetrisT), this);
+     wizball.body.onBeginContact.add(blockHit, this);
+
+}
+
+function render() {
+
+game.debug.text(result, 400, 400);
+temps = Math.round(this.game.time.totalElapsedSeconds()*100)/100
+game.debug.text('Time: ' + temps, 32, 32);
+
+}
+
+
+ function blockHit (body, bodyB, shapeA, shapeB, equation) {
+
+    //  The block hit something.
+    //  
+    //  This callback is sent 5 arguments:
+    //  
+    //  The Phaser.Physics.P2.Body it is in contact with. *This might be null* if the Body was created directly in the p2 world.
+    //  The p2.Body this Body is in contact with.
+    //  The Shape from this body that caused the contact.
+    //  The Shape from the contact body.
+    //  The Contact Equation data array.
+    //  
+    //  The first argument may be null or not have a sprite property, such as when you hit the world bounds.
+    if (body)
+    {
+        if(body.sprite.key == 'hadoopblock1')
+        {
+            result = 'INDICE';
+    
+        }
+    }
 
 }
 
@@ -132,6 +168,7 @@ function create() {
 
 
 function update() {
+wizball.body.onBeginContact.add(blockHit, this);
     wizball.body.moves = false;
 
     //tetrisT.body.setZeroVelocity();
@@ -199,3 +236,4 @@ function update() {
     }, 100);
 
 }
+
