@@ -134,11 +134,7 @@ function create() {
 
 function gofull() {
 
-    if (game.scale.isFullScreen)
-    {
-        game.scale.stopFullScreen();
-    }
-    else
+if (!game.scale.isFullScreen)
     {
         game.scale.startFullScreen(false);
     }
