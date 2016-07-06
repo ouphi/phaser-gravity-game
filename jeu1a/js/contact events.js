@@ -120,13 +120,13 @@ function create() {
 
     tetris1.inputEnabled = true;
     tetris1.input.enableDrag(true);
-    tetris1.events.onDragStart.add(startDrag(tetris1), this);
-    tetris1.events.onDragStop.add(stopDrag(tetris1), this);
+    tetris1.events.onDragStart.add(function(){startDrag(tetris1)}, this);
+    tetris1.events.onDragStop.add(function(){stopDrag(tetris1)}, this);
 
     tetrisT.inputEnabled = true;
     tetrisT.input.enableDrag(true);
-    tetrisT.events.onDragStart.add(startDrag(tetrisT), this);
-    tetrisT.events.onDragStop.add(stopDrag(tetrisT), this);
+    tetrisT.events.onDragStart.add(function(){startDrag(tetrisT)}, this);
+    tetrisT.events.onDragStop.add(function(){stopDrag(tetrisT)}, this);
      wizball.body.onBeginContact.add(blockHit, this);
 
 
@@ -205,6 +205,7 @@ wizball.body.onBeginContact.add(blockHit, this);
                 if( tetris1.body != null ){
                     tetris1.body.x = game.input.activePointer.worldX;
                     tetris1.body.y = game.input.activePointer.worldY;
+
                 }
             }
 
