@@ -217,12 +217,12 @@ wizball.body.onBeginContact.add(blockHit, this);
 
                     if(cursors.left.isDown)
                         {
-                            tetrisT.body.rotateLeft(50);
+                            tetrisT.body.rotateLeft(100);
                             
                         } 
                     else if(cursors.right.isDown)
                     {
-                        tetrisT.body.rotateRight(50);
+                        tetrisT.body.rotateRight(100);
                         
                     }
                     else tetrisT.body.rotateLeft(0);
