@@ -5,8 +5,8 @@ function fullScreenAndLaunchGame() {
 }
 
 function launchGame(){
-     var width = 1160;
-    var height = 720;
+     var width = 1920;
+    var height = 1080;
 
 
         game = new Phaser.Game(width, height, Phaser.AUTO, 'jeu', { preload: preload, create: create, update: update, render: render });
@@ -80,10 +80,12 @@ function launchGame(){
     hadoop1 = game.add.sprite(1040, 640, 'hadoopblock1');
     level1 = game.add.sprite(300, 200, 'level1');
     tetrisT = game.add.sprite(700, 400, 'tetrisT');
+    wheel1 = game.add.sprite(1000,1000,'tetrisT');
+
     //ball = game.add.sprite(500, 500, 'wizball');
 
     //  Enable the physics bodies on all the sprites
-    game.physics.p2.enable([ wizball, tetris1, hadoop1, level1, tetrisT ], false);
+    game.physics.p2.enable([ wizball, tetris1, hadoop1, level1, tetrisT, wheel1 ], false);
     game.physics.p2.gravity.y = 1000;
 
     //  The following just loads the polygon data into the objects
@@ -112,6 +114,11 @@ function launchGame(){
     tetrisT.input.enableDrag(true); 
     tetrisT.body.mass = 4000;
 
+    //wheel 
+    wheel1.body.clearShapes();
+    wheel1.body.loadPolygon('physicsData', 'tetrisT');
+    wheel1.body.static = true;
+
     cursors = game.input.keyboard.createCursorKeys();
 
     //addKeys( { 'start': Phaser.KeyCode.W } );
@@ -130,6 +137,11 @@ function launchGame(){
 
     wizball.body.onBeginContact.add(function(body, bodyB) {removeBlockT(body,tetris1,tetrisT)}, this);
 
+    wizball.body.onBeginContact.add(launchBall,this);
+
+    spring = game.physics.p2.createSpring(level, tetrisT, 20, 10, 1);
+     game.physics.p2.removeSpring(spring);
+
 }
 
 function gofull() {
@@ -141,16 +153,43 @@ if (!game.scale.isFullScreen)
 
 }
 
-function render() {
+function launchBall(body, bodyB, shapeA, shapeB, equation) {
+    if(body)
+    {
+        if(body.sprite.key == 'tetrisT')
+        {  
+            wizball.body.static = false;
 
-game.debug.text(result, 400, 400);
-temps = Math.round(this.game.time.totalElapsedSeconds()*100)/100
-game.debug.text('Time: ' + temps, 32, 32);
-
-game.debug.text(point, 600, 500);
+        }
+    }
 
 }
 
+function render() {
+game.debug.text(result, 400, 400);
+temps = Math.round(this.game.time.totalElapsedSeconds()*100)/100
+game.debug.text('Time: ' + temps, 32, 32);
+game.debug.text(point, 600, 500);
+}
+
+/*receive a list of sprite and make them static (cant move, no gravity)*/
+function setElementsAsStatic(list_sprite)
+{
+    for (var i in list_sprite) {
+        list_sprite[i].body.static = true;
+    }
+}
+
+function setElementsAsDraggable(list_sprite)
+{
+    for (var i in list_sprite)
+    {
+    list_sprite[i].inputEnabled = true;
+    list_sprite[i].input.enableDrag(true);
+    list_sprite[i].events.onDragStart.add(function(){startDrag(list_sprite[i])}, this);
+    list_sprite[i].events.onDragStop.add(function(){stopDrag(list_sprite[i])}, this);
+    }
+}
 
  function blockHit (body, bodyB, shapeA, shapeB, equation) {
 
@@ -224,6 +263,8 @@ function dragElements(elements)
 
 function update() {
 
+    wheel1.body.rotateRight(50);
+
   // Stretch to fill
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
 
@@ -234,11 +275,8 @@ function update() {
     // game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
     game.input.onDown.add(gofull, this);
-
     wizball.body.onBeginContact.add(blockHit, this);
     wizball.body.moves = false;
-
-
     dragElements([tetris1, tetrisT]);
    
 
@@ -250,6 +288,8 @@ function update() {
         wizball.body.static = false;
         tetrisT.body.static =true;
     }
+
+
 }
 
     setTimeout(function(){
