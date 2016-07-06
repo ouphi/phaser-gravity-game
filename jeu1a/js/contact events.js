@@ -129,6 +129,20 @@ function create() {
     tetrisT.events.onDragStop.add(stopDrag(tetrisT), this);
      wizball.body.onBeginContact.add(blockHit, this);
 
+
+}
+
+function gofull() {
+
+    if (game.scale.isFullScreen)
+    {
+        game.scale.stopFullScreen();
+    }
+    else
+    {
+        game.scale.startFullScreen(false);
+    }
+
 }
 
 function render() {
@@ -172,6 +186,18 @@ game.debug.text(point, 600, 500);
 
 
 function update() {
+
+  // Stretch to fill
+    game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
+
+    // Keep original size
+    // game.scale.fullScreenScaleMode = Phaser.ScaleManager.NO_SCALE;
+
+    // Maintain aspect ratio
+    // game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+    game.input.onDown.add(gofull, this);
+
 wizball.body.onBeginContact.add(blockHit, this);
     wizball.body.moves = false;
 
