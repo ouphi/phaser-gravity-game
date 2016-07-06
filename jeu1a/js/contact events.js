@@ -170,7 +170,7 @@ game.debug.text(point, 600, 500);
         if(body.sprite.key == 'hadoopblock1')
         {
             result = 'INDICE';
-            point = 'Vous avez gagné ' + Math.round((1/temps) * 100) + 'points'
+            point = 'Vous avez gagné ' + Math.round((1/temps) * 100) + ' points'
 
     
         }
