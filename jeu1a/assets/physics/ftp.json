@@ -1,0 +1,11 @@
+{ 
+    
+    "ftp": [
+        
+        {
+            "density": 2, "friction": 0, "bounce": 0, 
+            "filter": { "categoryBits": 1, "maskBits": 65535 },
+            "shape": [   77, 82  ,  4, 82  ,  0, 78  ,  0, 3  ,  3, 0  ,  79, 0  ,  82, 3  ,  82, 78  ]
+        }
+    ]
+}

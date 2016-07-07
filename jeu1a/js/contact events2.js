@@ -33,7 +33,14 @@ function launchGame2(){
             game.load.image('bord_bas','assets/sprites/bord_bas.png');
             game.load.image('buzzer','assets/sprites/buzzer.png');
             game.load.image('barre_disappear','assets/sprites/barre_disappear.png');
+            game.load.image('sqlserver','assets/sprites/sqlserver.png');
+            game.load.image('mongo','assets/sprites/mongo.png');
+            game.load.image('ftp','assets/sprites/ftp.png');
 
+            //balls
+            game.load.image('sqlball', 'assets/sprites/sqlball.png');
+            game.load.image('jsonball', 'assets/sprites/jsonball.png');
+            game.load.image('ftpball', 'assets/sprites/sqlball.png');
 //mapexport
             //every json physics config for each objects : 
             game.load.physics('physicsData', 'assets/physics/sprites.json');
@@ -44,6 +51,9 @@ function launchGame2(){
             game.load.physics('bord_bas_data', 'assets/physics/bord_bas.json');
             game.load.physics('buzzer_data', 'assets/physics/buzzer.json');
             game.load.physics('barre_disappear_data', 'assets/physics/barre_disappear.json');
+            game.load.physics('sqlserver_data', 'assets/physics/sqlserver.json');
+            game.load.physics('mongo_data', 'assets/physics/mongo.json');
+            game.load.physics('ftp_data', 'assets/physics/ftp.json');
 
         }
 
@@ -105,13 +115,20 @@ function launchGame2(){
     bord_bas = game.add.sprite(width/2,height-58, 'bord_bas');
     buzzer = game.add.sprite(1160,388, 'buzzer');
     barre_disappear = game.add.sprite(1016,485, 'barre_disappear');
+    sqlserver = game.add.sprite(183,925, 'sqlserver');
+    mongo = game.add.sprite(893,925, 'mongo');
+    ftp = game.add.sprite(1745,945, 'ftp');
 
 
     wizball = game.add.sprite(300, 200, 'wizball');
+    sqlball = game.add.sprite(730, 430, 'sqlball');
+    jsonball = game.add.sprite(1000, 430, 'jsonball');
+    ftpball = game.add.sprite(1100, 430, 'ftpball');
+
     tetris1 = game.add.sprite(600, 400, 'tetrisblock1');
     hadoop1 = game.add.sprite(150, 200, 'hadoopblock1');
    // level1 = game.add.sprite(300, 200, 'level1');
-    tetrisT = game.add.sprite(700, 400, 'tetrisT');
+    tetrisT = game.add.sprite(800, 800, 'tetrisT');
     wheel1 = game.add.sprite(1000,1000,'tetrisT');
 
   
@@ -119,10 +136,22 @@ function launchGame2(){
     //ball = game.add.sprite(500, 500, 'wizball');
 
     //  Enable the physics bodies on all the sprites
-    game.physics.p2.enable([ wizball, tetris1, hadoop1,/* level1,*/ tetrisT, wheel1, mapexport, decors_export, bord_gauche, bord_droit, bord_haut, bord_bas, buzzer, barre_disappear], false);
+    game.physics.p2.enable([ wizball, sqlball, jsonball, ftpball, tetris1, hadoop1,/* level1,*/ tetrisT, wheel1, mapexport, decors_export, bord_gauche, bord_droit, bord_haut, bord_bas, buzzer, barre_disappear, sqlserver, mongo, ftp], false);
     game.physics.p2.gravity.y = 1000;
 
     //  The following just loads the polygon data into the objects
+
+    ftp.body.clearShapes();
+    ftp.body.loadPolygon('ftp_data', 'ftp');
+    ftp.body.static = true;
+
+    mongo.body.clearShapes();
+    mongo.body.loadPolygon('mongo_data', 'mongo');
+    mongo.body.static = true;
+
+    sqlserver.body.clearShapes();
+    sqlserver.body.loadPolygon('sqlserver_data', 'sqlserver');
+    sqlserver.body.static = true;
 
     decors_export.body.clearShapes();
     decors_export.body.loadPolygon('decors_export_data', 'decors_export');
@@ -169,6 +198,10 @@ function launchGame2(){
 
     wizball.body.setCircle(15);
     wizball.body.static = true;
+
+    sqlball.body.setCircle(26);
+    jsonball.body.setCircle(26);
+    ftpball.body.setCircle(26);
 
 
     tetris1.body.clearShapes();

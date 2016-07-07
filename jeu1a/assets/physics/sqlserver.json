@@ -1,0 +1,11 @@
+{ 
+    
+    "sqlserver": [
+        
+        {
+            "density": 2, "friction": 0, "bounce": 0, 
+            "filter": { "categoryBits": 1, "maskBits": 65535 },
+            "shape": [   0, 0  ,  194, 0  ,  194, 119  ,  0, 119  ]
+        }
+    ]
+}
