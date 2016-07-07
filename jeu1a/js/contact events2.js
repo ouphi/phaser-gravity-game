@@ -36,11 +36,18 @@ function launchGame2(){
             game.load.image('sqlserver','assets/sprites/sqlserver.png');
             game.load.image('mongo','assets/sprites/mongo.png');
             game.load.image('ftp','assets/sprites/ftp.png');
+            game.load.image('bloc_haut','assets/sprites/bloc_haut.png');
 
             //balls
             game.load.image('sqlball', 'assets/sprites/sqlball.png');
             game.load.image('jsonball', 'assets/sprites/jsonball.png');
             game.load.image('ftpball', 'assets/sprites/sqlball.png');
+
+            game.load.image('triangle1', 'assets/sprites/triangle1.png');
+            game.load.image('triangle2', 'assets/sprites/triangle2.png');
+            game.load.image('triangle3', 'assets/sprites/triangle3.png');
+            game.load.image('triangle4', 'assets/sprites/triangle4.png');
+            game.load.image('triangle5', 'assets/sprites/triangle5.png');
 //mapexport
             //every json physics config for each objects : 
             game.load.physics('physicsData', 'assets/physics/sprites.json');
@@ -54,6 +61,9 @@ function launchGame2(){
             game.load.physics('sqlserver_data', 'assets/physics/sqlserver.json');
             game.load.physics('mongo_data', 'assets/physics/mongo.json');
             game.load.physics('ftp_data', 'assets/physics/ftp.json');
+            game.load.physics('bloc_haut_data', 'assets/physics/bloc_haut.json');
+            game.load.physics('triangles', 'assets/physics/triangles.json');
+
 
         }
 
@@ -73,6 +83,9 @@ function launchGame2(){
     var result = '';
     var point = '';
     var temps = 0;
+    var result_sqlball = '';
+    var result_jsonball = '';
+    var result_ftpball = '';
 
     function create() {
 
@@ -118,6 +131,13 @@ function launchGame2(){
     sqlserver = game.add.sprite(183,925, 'sqlserver');
     mongo = game.add.sprite(893,925, 'mongo');
     ftp = game.add.sprite(1745,945, 'ftp');
+    bloc_haut = game.add.sprite(1510,898, 'bloc_haut');
+    triangle1 = game.add.sprite(1510,898, 'triangle1');
+    triangle2 = game.add.sprite(1510,898, 'triangle2');
+    triangle3 = game.add.sprite(1510,898, 'triangle3');
+    triangle4 = game.add.sprite(1510,898, 'triangle4');
+    triangle5 = game.add.sprite(1510,898, 'triangle5');
+
 
 
     wizball = game.add.sprite(300, 200, 'wizball');
@@ -136,7 +156,10 @@ function launchGame2(){
     //ball = game.add.sprite(500, 500, 'wizball');
 
     //  Enable the physics bodies on all the sprites
-    game.physics.p2.enable([ wizball, sqlball, jsonball, ftpball, tetris1, hadoop1,/* level1,*/ tetrisT, wheel1, mapexport, decors_export, bord_gauche, bord_droit, bord_haut, bord_bas, buzzer, barre_disappear, sqlserver, mongo, ftp], false);
+    game.physics.p2.enable([ wizball, sqlball, jsonball, ftpball, tetris1, hadoop1,/* level1,*/ 
+        tetrisT, wheel1, mapexport, decors_export, bord_gauche, bord_droit, bord_haut, bord_bas, 
+        buzzer, barre_disappear, sqlserver, mongo, ftp, bloc_haut, triangle1, triangle2, triangle3, 
+        triangle4, triangle5], false);
     game.physics.p2.gravity.y = 1000;
 
     //  The following just loads the polygon data into the objects
@@ -144,6 +167,42 @@ function launchGame2(){
     ftp.body.clearShapes();
     ftp.body.loadPolygon('ftp_data', 'ftp');
     ftp.body.static = true;
+
+    bloc_haut.body.clearShapes();
+    bloc_haut.body.loadPolygon('bloc_haut_data', 'bloc_haut');
+    bloc_haut.body.static = true;
+    bloc_haut.inputEnabled = true;   
+    bloc_haut.input.enableDrag(true);
+
+    triangle1.body.clearShapes();
+    triangle1.body.loadPolygon('triangles', 'triangle1');
+    triangle1.body.static = true;
+    triangle1.inputEnabled = true;   
+    triangle1.input.enableDrag(true);
+
+    triangle2.body.clearShapes();
+    triangle2.body.loadPolygon('triangles', 'triangle2');
+    triangle2.body.static = true;
+    triangle2.inputEnabled = true;   
+    triangle2.input.enableDrag(true);
+
+    triangle3.body.clearShapes();
+    triangle3.body.loadPolygon('triangles', 'triangle3');
+    triangle3.body.static = true;
+    triangle3.inputEnabled = true;   
+    triangle3.input.enableDrag(true);
+
+    triangle4.body.clearShapes();
+    triangle4.body.loadPolygon('triangles', 'triangle4');
+    triangle4.body.static = true;
+    triangle4.inputEnabled = true;   
+    triangle4.input.enableDrag(true);
+
+    triangle5.body.clearShapes();
+    triangle5.body.loadPolygon('triangles', 'triangle5');
+    triangle5.body.static = true;
+    triangle5.inputEnabled = true;   
+    triangle5.input.enableDrag(true);
 
     mongo.body.clearShapes();
     mongo.body.loadPolygon('mongo_data', 'mongo');
@@ -225,23 +284,18 @@ function launchGame2(){
 
     //addKeys( { 'start': Phaser.KeyCode.W } );
         
+    li_drag = [tetris1, tetrisT, hadoop1, bloc_haut, triangle1, triangle2, triangle3, triangle4, triangle5];
 
-    tetris1.inputEnabled = true;
-    tetris1.input.enableDrag(true);
-    tetris1.events.onDragStart.add(function(){startDrag(tetris1)}, this);
-    tetris1.events.onDragStop.add(function(){stopDrag(tetris1)}, this);
+        for (var i in li_drag) {
+        
+        li_drag[i].inputEnabled = true;
+    li_drag[i].input.enableDrag(true);
+    li_drag[i].events.onDragStart.add(function(){startDrag(li_drag[i])}, this);
+    li_drag[i].events.onDragStop.add(function(){stopDrag(li_drag[i])}, this);
 
-    tetrisT.inputEnabled = true;
-    tetrisT.input.enableDrag(true);
-    tetrisT.events.onDragStart.add(function(){startDrag(tetrisT)}, this);
-    tetrisT.events.onDragStop.add(function(){stopDrag(tetrisT)}, this);
+    }
 
-    hadoop1.inputEnabled = true;
-    hadoop1.input.enableDrag(true);
-    hadoop1.events.onDragStart.add(function(){startDrag(hadoop1)}, this);
-    hadoop1.events.onDragStop.add(function(){stopDrag(hadoop1)}, this);
-
-    wizball.body.onBeginContact.add(blockHit, this);
+    //wizball.body.onBeginContact.add(blockHit, this);
 
     wizball.body.onBeginContact.add(function(body, bodyB) {removeBlockT(body,buzzer,barre_disappear)}, this);
 
@@ -276,6 +330,9 @@ function launchBall(body, bodyB, shapeA, shapeB, equation) {
 
 function render() {
 game.debug.text(result, 400, 400);
+game.debug.text(result_sqlball,183, 825);
+game.debug.text(result_jsonball,1000, 1000);
+game.debug.text(result_ftpball,1300, 700);
 temps = Math.round(this.game.time.totalElapsedSeconds()*100)/100
 game.debug.text('Time: ' + temps, 32, 32);
 game.debug.text(point, 600, 500);
@@ -300,7 +357,7 @@ function setElementsAsDraggable(list_sprite)
     }
 }
 
- function blockHit (body, bodyB, shapeA, shapeB, equation) {
+ /*function blockHit (body, bodyB, shapeA, shapeB, equation) {
 
     //  The block hit something.
     //  
@@ -315,15 +372,64 @@ function setElementsAsDraggable(list_sprite)
     //  The first argument may be null or not have a sprite property, such as when you hit the world bounds.
     if (body)
     {
-        if(body.sprite.key == ' A REMPLIR')
+        if(bodyB)
+      {
+        if(body.sprite.key == 'sqlserver' && bodyB.sprite.key == 'sqlball')
         {
-            result = 'INDICE';
-            point = 'Vous avez gagné ' + Math.round((1/temps) * 100) + ' points'
+            result_sqlball = 'Export SQLServer OK';
+            //point = 'Vous avez gagné ' + Math.round((1/temps) * 100) + ' points'
+            console.log('impact sql server');
 
-    
+        } else if(body.sprite.key == 'mongo' && bodyB.sprite.key == 'jsonball')
+        {
+            result_jsonball = 'Export Mongo OK';
+            console.log('impact mongo');
+
+        } else if(body.sprite.key == 'ftp' && bodyB.sprite.key == 'ftpball')
+        {
+            result_ftpball = 'Export FTP OK'
+            console.log('impact ftp');
         }
+    }  
     }
+    
 
+}*/
+
+function hitsql(body, bodyB, shapeA, shapeB, equation){
+    if(body)
+    {
+        if(body.sprite.key == 'sqlserver')
+        {
+            result_sqlball = 'Export SQLServer OK';
+            //point = 'Vous avez gagné ' + Math.round((1/temps) * 100) + ' points'
+        }
+
+    }
+}
+
+function hitmongo(body, bodyB, shapeA, shapeB, equation){
+    if(body)
+    {
+        if(body.sprite.key == 'mongo')
+        {
+            result_jsonball = 'Export Mongo OK';
+            //point = 'Vous avez gagné ' + Math.round((1/temps) * 100) + ' points'
+        }
+
+    }
+}
+
+function hitftp(body, bodyB, shapeA, shapeB, equation){
+    if(body)
+    {
+        if(body.sprite.key == 'ftp')
+        {
+            result_ftpball = 'Export FTP OK'
+            //point = 'Vous avez gagné ' + Math.round((1/temps) * 100) + ' points'
+        }
+
+    }
 }
 
 function removeBlockT(body, target1, target2) {
@@ -406,9 +512,17 @@ function update() {
     // game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
     game.input.onDown.add(gofull, this);
-    wizball.body.onBeginContact.add(blockHit, this);
+    //wizball.body.onBeginContact.add(blockHit, this);
+
+    //contact entre ball et leur export
+    sqlball.body.onBeginContact.add(hitsql, this);
+
+    ftpball.body.onBeginContact.add(hitftp, this);
+
+    jsonball.body.onBeginContact.add(hitmongo, this);
+
     //wizball.body.moves = false;
-    dragElements([tetris1, tetrisT,]);
+    dragElements([tetris1, tetrisT, bloc_haut, triangle1, triangle2, triangle3, triangle4, triangle5]);
    
 
     if (cursors.down.isDown)
