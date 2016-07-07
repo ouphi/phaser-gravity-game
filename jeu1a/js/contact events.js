@@ -17,18 +17,31 @@ function launchGame(){
             game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
             game.scale.pageAlignVertically = true;
             //game.scale.setScreenSize(true);
-            game.load.image('kenney', 'assets/tilemaps/tiles/kenney.png');
-            game.load.tilemap('map', 'assets/tilemaps/maps/gnama.json', null, Phaser.Tilemap.TILED_JSON);
+            //game.load.image('kenney', 'assets/tilemaps/tiles/kenney.png');
+            //game.load.tilemap('map', 'assets/tilemaps/maps/gnama.json', null, Phaser.Tilemap.TILED_JSON);
             game.load.image('block', 'assets/sprites/block.png');
             game.load.image('wizball', 'assets/sprites/shinyball.png');
             game.load.image('tetrisblock1', 'assets/sprites/tetrisblock1.png');
             game.load.image('hadoopblock1', 'assets/sprites/hadoop1.png');
-            game.load.image('sky', 'assets/skies/sky1.png');
-            game.load.image('level1', 'assets/sprites/level1.png')
+
+            game.load.image('bord_gauche','assets/sprites/bord_gauche.png');
+            game.load.image('bord_droit','assets/sprites/bord_droit.png');
+            //game.load.image('bord_haut','assets/sprites/bord_haut.png');
+            game.load.image('bord_bas2','assets/sprites/bord_bas2.png');
+            game.load.image('bord_haut2', 'assets/sprites/bord_haut2.png');
+
+            //game.load.image('sky', 'assets/skies/sky1.png');
+            //game.load.image('level1', 'assets/sprites/level1.png')
             game.load.image('tetrisT', 'assets/sprites/tetrisT.png');
 
             //every json physics config for each objects : 
             game.load.physics('physicsData', 'assets/physics/sprites.json');
+            game.load.physics('bord_gauche_data', 'assets/physics/bord_gauche.json');
+            game.load.physics('bord_droit_data', 'assets/physics/bord_droit.json');
+            //game.load.physics('bord_haut_data', 'assets/physics/bord_haut.json');
+            game.load.physics('bord_bas2_data', 'assets/physics/bord_bas2.json');
+            game.load.physics('bord_haut2_data', 'assets/physics/bord_haut2.json');
+
 
         }
 
@@ -66,10 +79,10 @@ function launchGame(){
 
 
 
-    var sky = game.add.image(0, 0, 'sky');
-    sky.fixedToCamera = true;
-    sky.width = game.width;
-    sky.height = game.height;
+    //var sky = game.add.image(0, 0, 'sky');
+    //sky.fixedToCamera = true;
+    //sky.width = game.width;
+    //sky.height = game.height;
 
     //map = game.add.tilemap('map');
     //map.addTilesetImage('kenney');
@@ -84,18 +97,25 @@ function launchGame(){
 
 
     //add sprites : 
+
+    bord_gauche = game.add.sprite(90,1080/2, 'bord_gauche');
+    bord_droit = game.add.sprite(1870,540, 'bord_droit');
+    //bord_haut = game.add.sprite(width/2-3,47, 'bord_haut');
+    bord_haut2 = game.add.sprite(width/2,188, 'bord_haut2');
+    bord_bas2 = game.add.sprite(width/2-3,height-71, 'bord_bas2');
+
     //block = game.add.sprite(500, 200, 'block');
     wizball = game.add.sprite(30, 70, 'wizball');
     tetris1 = game.add.sprite(100, 200, 'tetrisblock1');
     hadoop1 = game.add.sprite(1040, 640, 'hadoopblock1');
-    level1 = game.add.sprite(300, 200, 'level1');
+    //level1 = game.add.sprite(300, 200, 'level1');
     tetrisT = game.add.sprite(700, 400, 'tetrisT');
     wheel1 = game.add.sprite(1000,1000,'tetrisT');
 
     //ball = game.add.sprite(500, 500, 'wizball');
 
     //  Enable the physics bodies on all the sprites
-    game.physics.p2.enable([ wizball, tetris1, hadoop1, level1, tetrisT, wheel1 ], false);
+    game.physics.p2.enable([ wizball, tetris1, hadoop1, tetrisT, wheel1 ,bord_gauche, bord_droit, bord_bas2, bord_haut2], false);
     game.physics.p2.gravity.y = 1000;
 
     //  The following just loads the polygon data into the objects
@@ -104,12 +124,32 @@ function launchGame(){
     hadoop1.body.loadPolygon('physicsData', 'hadoopblock1');
     hadoop1.body.static = true;
 
-    level1.body.clearShapes();
-    level1.body.loadPolygon('physicsData', 'level1');
-    level1.body.static = true;
+    //level1.body.clearShapes();
+    //level1.body.loadPolygon('physicsData', 'level1');
+    //level1.body.static = true;
 
     wizball.body.setCircle(15);
     wizball.body.static = true;
+
+     bord_gauche.body.clearShapes();
+    bord_gauche.body.loadPolygon('bord_gauche_data', 'bord_gauche');
+    bord_gauche.body.static = true;
+
+     bord_droit.body.clearShapes()
+    bord_droit.body.loadPolygon('bord_droit_data', 'bord_droit');
+    bord_droit.body.static = true;
+
+    /*bord_haut.body.clearShapes();
+    bord_haut.body.loadPolygon('bord_haut_data', 'bord_haut');
+    bord_haut.body.static = true;*/
+
+    bord_haut2.body.clearShapes();
+    bord_haut2.body.loadPolygon('bord_haut2_data', 'bord_haut2');
+    bord_haut2.body.static = true;
+
+    bord_bas2.body.clearShapes();
+    bord_bas2.body.loadPolygon('bord_bas2_data', 'bord_bas2');
+    bord_bas2.body.static = true;
 
 
     tetris1.body.clearShapes();
@@ -149,8 +189,8 @@ function launchGame(){
 
     wizball.body.onBeginContact.add(launchBall,this);
 
-    spring = game.physics.p2.createSpring(level, tetrisT, 20, 10, 1);
-     game.physics.p2.removeSpring(spring);
+    //spring = game.physics.p2.createSpring(level, tetrisT, 20, 10, 1);
+     //game.physics.p2.removeSpring(spring);
 
 }
 
