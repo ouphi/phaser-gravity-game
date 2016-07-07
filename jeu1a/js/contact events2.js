@@ -31,6 +31,8 @@ function launchGame2(){
             game.load.image('bord_droit','assets/sprites/bord_droit.png');
             game.load.image('bord_haut','assets/sprites/bord_haut.png');
             game.load.image('bord_bas','assets/sprites/bord_bas.png');
+            game.load.image('buzzer','assets/sprites/buzzer.png');
+            game.load.image('barre_disappear','assets/sprites/barre_disappear.png');
 
 //mapexport
             //every json physics config for each objects : 
@@ -40,6 +42,8 @@ function launchGame2(){
             game.load.physics('bord_droit_data', 'assets/physics/bord_droit.json');
             game.load.physics('bord_haut_data', 'assets/physics/bord_haut.json');
             game.load.physics('bord_bas_data', 'assets/physics/bord_bas.json');
+            game.load.physics('buzzer_data', 'assets/physics/buzzer.json');
+            game.load.physics('barre_disappear_data', 'assets/physics/barre_disappear.json');
 
         }
 
@@ -99,6 +103,9 @@ function launchGame2(){
     bord_droit = game.add.sprite(1870,540, 'bord_droit');
     bord_haut = game.add.sprite(width/2-3,47, 'bord_haut');
     bord_bas = game.add.sprite(width/2,height-58, 'bord_bas');
+    buzzer = game.add.sprite(1160,388, 'buzzer');
+    barre_disappear = game.add.sprite(1016,485, 'barre_disappear');
+
 
     wizball = game.add.sprite(300, 200, 'wizball');
     tetris1 = game.add.sprite(600, 400, 'tetrisblock1');
@@ -112,7 +119,7 @@ function launchGame2(){
     //ball = game.add.sprite(500, 500, 'wizball');
 
     //  Enable the physics bodies on all the sprites
-    game.physics.p2.enable([ wizball, tetris1, hadoop1,/* level1,*/ tetrisT, wheel1, mapexport, decors_export, bord_gauche, bord_droit, bord_haut, bord_bas], false);
+    game.physics.p2.enable([ wizball, tetris1, hadoop1,/* level1,*/ tetrisT, wheel1, mapexport, decors_export, bord_gauche, bord_droit, bord_haut, bord_bas, buzzer, barre_disappear], false);
     game.physics.p2.gravity.y = 1000;
 
     //  The following just loads the polygon data into the objects
@@ -136,6 +143,14 @@ function launchGame2(){
     bord_bas.body.clearShapes();
     bord_bas.body.loadPolygon('bord_bas_data', 'bord_bas');
     bord_bas.body.static = true;
+
+    barre_disappear.body.clearShapes();
+    barre_disappear.body.loadPolygon('barre_disappear_data', 'barre_disappear');
+    barre_disappear.body.static = true;
+
+    buzzer.body.clearShapes();
+    buzzer.body.loadPolygon('buzzer_data', 'buzzer');
+    buzzer.body.static = true;
 
 
     mapexport.body.clearShapes();
@@ -195,7 +210,7 @@ function launchGame2(){
 
     wizball.body.onBeginContact.add(blockHit, this);
 
-    wizball.body.onBeginContact.add(function(body, bodyB) {removeBlockT(body,tetris1,tetrisT)}, this);
+    wizball.body.onBeginContact.add(function(body, bodyB) {removeBlockT(body,buzzer,barre_disappear)}, this);
 
     wizball.body.onBeginContact.add(launchBall,this);
 
@@ -326,7 +341,7 @@ function moveHadoop()
     console.log(hadoop1.x)
     if(hadoop1.x <= 400)
     {
-       hadoop1.body.moveRight(2000); 
+       hadoop1.body.moveRight(3000); 
     }
    else {
     hadoop1.body.static = true;
