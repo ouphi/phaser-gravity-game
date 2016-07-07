@@ -34,6 +34,12 @@ function launchGame(){
             //game.load.image('level1', 'assets/sprites/level1.png')
             game.load.image('tetrisT', 'assets/sprites/tetrisT.png');
 
+
+            game.load.image('catourne', 'assets/sprites/catourne.png');
+
+
+
+
             //every json physics config for each objects : 
             game.load.physics('physicsData', 'assets/physics/sprites.json');
             game.load.physics('bord_gauche_data', 'assets/physics/bord_gauche.json');
@@ -41,6 +47,8 @@ function launchGame(){
             //game.load.physics('bord_haut_data', 'assets/physics/bord_haut.json');
             game.load.physics('bord_bas2_data', 'assets/physics/bord_bas2.json');
             game.load.physics('bord_haut2_data', 'assets/physics/bord_haut2.json');
+
+            game.load.physics('catourne_data', 'assets/physics/catourne.json');
 
 
         }
@@ -112,13 +120,19 @@ function launchGame(){
     tetrisT = game.add.sprite(700, 400, 'tetrisT');
     wheel1 = game.add.sprite(1000,1000,'tetrisT');
 
+    catourne = game.add.sprite(800,800, 'catourne');
+
     //ball = game.add.sprite(500, 500, 'wizball');
 
     //  Enable the physics bodies on all the sprites
-    game.physics.p2.enable([ wizball, tetris1, hadoop1, tetrisT, wheel1 ,bord_gauche, bord_droit, bord_bas2, bord_haut2], false);
+    game.physics.p2.enable([ wizball, tetris1, hadoop1, tetrisT, wheel1 ,bord_gauche, bord_droit, bord_bas2, bord_haut2, catourne], false);
     game.physics.p2.gravity.y = 1000;
 
     //  The following just loads the polygon data into the objects
+
+    catourne.body.clearShapes();
+    catourne.body.loadPolygon('catourne_data', 'catourne');
+    catourne.body.static = true;
 
     hadoop1.body.clearShapes();
     hadoop1.body.loadPolygon('physicsData', 'hadoopblock1');
@@ -131,7 +145,13 @@ function launchGame(){
     wizball.body.setCircle(15);
     wizball.body.static = true;
 
-     bord_gauche.body.clearShapes();
+    catourne.body.clearShapes();
+    catourne.body.loadPolygon('catourne_data', 'catourne');
+    catourne.body.static = true;
+    catourne.inputEnabled = true;   
+    catourne.input.enableDrag(true);
+
+    bord_gauche.body.clearShapes();
     bord_gauche.body.loadPolygon('bord_gauche_data', 'bord_gauche');
     bord_gauche.body.static = true;
 
@@ -168,6 +188,18 @@ function launchGame(){
     wheel1.body.clearShapes();
     wheel1.body.loadPolygon('physicsData', 'tetrisT');
     wheel1.body.static = true;
+
+
+    li_drag = [catourne];
+
+        for (var i in li_drag) {
+        
+        li_drag[i].inputEnabled = true;
+    li_drag[i].input.enableDrag(true);
+    li_drag[i].events.onDragStart.add(function(){startDrag(li_drag[i])}, this);
+    li_drag[i].events.onDragStop.add(function(){stopDrag(li_drag[i])}, this);
+
+    }
 
     cursors = game.input.keyboard.createCursorKeys();
 
@@ -321,6 +353,9 @@ function update() {
 
     wheel1.body.rotateRight(50);
 
+    catourne.anchor.setTo(0.5,0.5);
+    catourne.body.rotateRight(50);
+
   // Stretch to fill
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
 
@@ -333,7 +368,7 @@ function update() {
     game.input.onDown.add(gofull, this);
     wizball.body.onBeginContact.add(blockHit, this);
     wizball.body.moves = false;
-    dragElements([tetris1, tetrisT]);
+    dragElements([tetris1, tetrisT, catourne]);
    
 
     if (cursors.down.isDown)
