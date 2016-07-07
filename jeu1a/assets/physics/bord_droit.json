@@ -1,0 +1,21 @@
+{ 
+    
+    "bord_droit": [
+        
+        {
+            "density": 2, "friction": 0, "bounce": 0, 
+            "filter": { "categoryBits": 1, "maskBits": 65535 },
+            "shape": [   0, 989  ,  10, 989  ,  38, 1069  ,  38, 1079  ,  0, 1079  ]
+        } ,
+        {
+            "density": 2, "friction": 0, "bounce": 0, 
+            "filter": { "categoryBits": 1, "maskBits": 65535 },
+            "shape": [   0, 1  ,  10, 1  ,  10, 91  ,  0, 91  ]
+        } ,
+        {
+            "density": 2, "friction": 0, "bounce": 0, 
+            "filter": { "categoryBits": 1, "maskBits": 65535 },
+            "shape": [   100, 1069  ,  38, 1069  ,  10, 989  ,  10, 0  ,  100, 0  ]
+        }
+    ]
+}

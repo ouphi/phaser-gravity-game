@@ -26,12 +26,20 @@ function launchGame2(){
             game.load.image('sky', 'assets/skies/sky1.png');
             //game.load.image('level1', 'assets/sprites/level1.png')
             game.load.image('tetrisT', 'assets/sprites/tetrisT.png');
-            game.load.image('decors_export','assets/sprites/decors_export.png')
+            game.load.image('decors_export','assets/sprites/decors_export.png');
+            game.load.image('bord_gauche','assets/sprites/bord_gauche.png');
+            game.load.image('bord_droit','assets/sprites/bord_droit.png');
+            game.load.image('bord_haut','assets/sprites/bord_haut.png');
+            game.load.image('bord_bas','assets/sprites/bord_bas.png');
 
 //mapexport
             //every json physics config for each objects : 
             game.load.physics('physicsData', 'assets/physics/sprites.json');
-            game.load.physics('decors_export_data', 'assets/physics/decors_export.json')
+            game.load.physics('decors_export_data', 'assets/physics/decors_export.json');
+            game.load.physics('bord_gauche_data', 'assets/physics/bord_gauche.json');
+            game.load.physics('bord_droit_data', 'assets/physics/bord_droit.json');
+            game.load.physics('bord_haut_data', 'assets/physics/bord_haut.json');
+            game.load.physics('bord_bas_data', 'assets/physics/bord_bas.json');
 
         }
 
@@ -54,10 +62,8 @@ function launchGame2(){
 
     function create() {
 
-        //add key
+        
 
-         key1 = game.input.keyboard.addKey(Phaser.Keyboard.D);
-    key1.onDown.add(moveHadoop, this);
 
 
 
@@ -89,10 +95,14 @@ function launchGame2(){
     //block = game.add.sprite(500, 200, 'block');
     mapexport = game.add.sprite(width/2, height/2, 'mapexport');
     decors_export = game.add.sprite(954,764, 'decors_export');
+    bord_gauche = game.add.sprite(90,1080/2, 'bord_gauche');
+    bord_droit = game.add.sprite(1870,540, 'bord_droit');
+    bord_haut = game.add.sprite(width/2-3,47, 'bord_haut');
+    bord_bas = game.add.sprite(width/2,height-58, 'bord_bas');
 
-    wizball = game.add.sprite(30, 70, 'wizball');
-    tetris1 = game.add.sprite(100, 200, 'tetrisblock1');
-    hadoop1 = game.add.sprite(1040, 640, 'hadoopblock1');
+    wizball = game.add.sprite(300, 200, 'wizball');
+    tetris1 = game.add.sprite(600, 400, 'tetrisblock1');
+    hadoop1 = game.add.sprite(150, 200, 'hadoopblock1');
    // level1 = game.add.sprite(300, 200, 'level1');
     tetrisT = game.add.sprite(700, 400, 'tetrisT');
     wheel1 = game.add.sprite(1000,1000,'tetrisT');
@@ -102,7 +112,7 @@ function launchGame2(){
     //ball = game.add.sprite(500, 500, 'wizball');
 
     //  Enable the physics bodies on all the sprites
-    game.physics.p2.enable([ wizball, tetris1, hadoop1,/* level1,*/ tetrisT, wheel1, mapexport, decors_export], false);
+    game.physics.p2.enable([ wizball, tetris1, hadoop1,/* level1,*/ tetrisT, wheel1, mapexport, decors_export, bord_gauche, bord_droit, bord_haut, bord_bas], false);
     game.physics.p2.gravity.y = 1000;
 
     //  The following just loads the polygon data into the objects
@@ -111,6 +121,23 @@ function launchGame2(){
     decors_export.body.loadPolygon('decors_export_data', 'decors_export');
     decors_export.body.static = true;
 
+    bord_gauche.body.clearShapes();
+    bord_gauche.body.loadPolygon('bord_gauche_data', 'bord_gauche');
+    bord_gauche.body.static = true;
+
+     bord_droit.body.clearShapes()
+    bord_droit.body.loadPolygon('bord_droit_data', 'bord_droit');
+    bord_droit.body.static = true;
+
+    bord_haut.body.clearShapes();
+    bord_haut.body.loadPolygon('bord_haut_data', 'bord_haut');
+    bord_haut.body.static = true;
+
+    bord_bas.body.clearShapes();
+    bord_bas.body.loadPolygon('bord_bas_data', 'bord_bas');
+    bord_bas.body.static = true;
+
+
     mapexport.body.clearShapes();
     mapexport.body.loadPolygon('physicsData', 'mapexport');
     mapexport.body.static = true;
@@ -118,7 +145,8 @@ function launchGame2(){
 
     hadoop1.body.clearShapes();
     hadoop1.body.loadPolygon('physicsData', 'hadoopblock1');
-    hadoop1.body.static = true;
+    hadoop1.inputEnabled = true;
+    hadoop1.input.enableDrag(true);
 
     /*level1.body.clearShapes();
     level1.body.loadPolygon('physicsData', 'level1');
@@ -159,6 +187,12 @@ function launchGame2(){
     tetrisT.input.enableDrag(true);
     tetrisT.events.onDragStart.add(function(){startDrag(tetrisT)}, this);
     tetrisT.events.onDragStop.add(function(){stopDrag(tetrisT)}, this);
+
+    hadoop1.inputEnabled = true;
+    hadoop1.input.enableDrag(true);
+    hadoop1.events.onDragStart.add(function(){startDrag(hadoop1)}, this);
+    hadoop1.events.onDragStop.add(function(){stopDrag(hadoop1)}, this);
+
     wizball.body.onBeginContact.add(blockHit, this);
 
     wizball.body.onBeginContact.add(function(body, bodyB) {removeBlockT(body,tetris1,tetrisT)}, this);
@@ -182,8 +216,9 @@ if (!game.scale.isFullScreen)
 function launchBall(body, bodyB, shapeA, shapeB, equation) {
     if(body)
     {
-        if(body.sprite.key == 'tetrisT')
+        if(body.sprite.key == 'hadoopblock1')
         {  
+            console.log('hadoop');
             wizball.body.static = false;
 
         }
@@ -232,7 +267,7 @@ function setElementsAsDraggable(list_sprite)
     //  The first argument may be null or not have a sprite property, such as when you hit the world bounds.
     if (body)
     {
-        if(body.sprite.key == 'hadoopblock1')
+        if(body.sprite.key == ' A REMPLIR')
         {
             result = 'INDICE';
             point = 'Vous avez gagné ' + Math.round((1/temps) * 100) + ' points'
@@ -287,13 +322,29 @@ function dragElements(elements)
 
 function moveHadoop()
 {
-    hadoop1.body.moveRight(500);
+    console.log(hadoop1.y)
+    console.log(hadoop1.x)
+    if(hadoop1.x <= 400)
+    {
+       hadoop1.body.moveRight(2000); 
+    }
+   else {
+    hadoop1.body.static = true;
+    hadoop1.body.moves = false
+   }
 }
 
 
 
 
 function update() {
+
+    //add key
+
+       
+
+        key1 = game.input.keyboard.addKey(Phaser.Keyboard.D);
+        key1.onDown.add(moveHadoop, this);
 
     wheel1.body.rotateRight(50);
 
@@ -308,8 +359,8 @@ function update() {
 
     game.input.onDown.add(gofull, this);
     wizball.body.onBeginContact.add(blockHit, this);
-    wizball.body.moves = false;
-    dragElements([tetris1, tetrisT]);
+    //wizball.body.moves = false;
+    dragElements([tetris1, tetrisT,]);
    
 
     if (cursors.down.isDown)
