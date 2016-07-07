@@ -17,18 +17,21 @@ function launchGame2(){
             game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
             game.scale.pageAlignVertically = true;
             //game.scale.setScreenSize(true);
-            game.load.image('kenney', 'assets/tilemaps/tiles/kenney.png');
-            game.load.tilemap('map', 'assets/tilemaps/maps/gnama.json', null, Phaser.Tilemap.TILED_JSON);
+            
+            game.load.image('mapexport', 'assets/sprites/map-export.png');
             game.load.image('block', 'assets/sprites/block.png');
             game.load.image('wizball', 'assets/sprites/shinyball.png');
             game.load.image('tetrisblock1', 'assets/sprites/tetrisblock1.png');
             game.load.image('hadoopblock1', 'assets/sprites/hadoop1.png');
             game.load.image('sky', 'assets/skies/sky1.png');
-            game.load.image('level1', 'assets/sprites/level1.png')
+            //game.load.image('level1', 'assets/sprites/level1.png')
             game.load.image('tetrisT', 'assets/sprites/tetrisT.png');
+            game.load.image('decors_export','assets/sprites/decors_export.png')
 
+//mapexport
             //every json physics config for each objects : 
             game.load.physics('physicsData', 'assets/physics/sprites.json');
+            game.load.physics('decors_export_data', 'assets/physics/decors_export.json')
 
         }
 
@@ -66,10 +69,9 @@ function launchGame2(){
 
 
 
-    var sky = game.add.image(0, 0, 'sky');
-    sky.fixedToCamera = true;
-    sky.width = game.width;
-    sky.height = game.height;
+     //mapexport = game.add.image(0, 0, 'mapexport');
+    //mapexport.fixedToCamera = true;
+    
 
     //map = game.add.tilemap('map');
     //map.addTilesetImage('kenney');
@@ -85,28 +87,42 @@ function launchGame2(){
 
     //add sprites : 
     //block = game.add.sprite(500, 200, 'block');
+    mapexport = game.add.sprite(width/2, height/2, 'mapexport');
+    decors_export = game.add.sprite(954,764, 'decors_export');
+
     wizball = game.add.sprite(30, 70, 'wizball');
     tetris1 = game.add.sprite(100, 200, 'tetrisblock1');
     hadoop1 = game.add.sprite(1040, 640, 'hadoopblock1');
-    level1 = game.add.sprite(300, 200, 'level1');
+   // level1 = game.add.sprite(300, 200, 'level1');
     tetrisT = game.add.sprite(700, 400, 'tetrisT');
     wheel1 = game.add.sprite(1000,1000,'tetrisT');
+
+  
 
     //ball = game.add.sprite(500, 500, 'wizball');
 
     //  Enable the physics bodies on all the sprites
-    game.physics.p2.enable([ wizball, tetris1, hadoop1, level1, tetrisT, wheel1 ], false);
+    game.physics.p2.enable([ wizball, tetris1, hadoop1,/* level1,*/ tetrisT, wheel1, mapexport, decors_export], false);
     game.physics.p2.gravity.y = 1000;
 
     //  The following just loads the polygon data into the objects
+
+    decors_export.body.clearShapes();
+    decors_export.body.loadPolygon('decors_export_data', 'decors_export');
+    decors_export.body.static = true;
+
+    mapexport.body.clearShapes();
+    mapexport.body.loadPolygon('physicsData', 'mapexport');
+    mapexport.body.static = true;
+
 
     hadoop1.body.clearShapes();
     hadoop1.body.loadPolygon('physicsData', 'hadoopblock1');
     hadoop1.body.static = true;
 
-    level1.body.clearShapes();
+    /*level1.body.clearShapes();
     level1.body.loadPolygon('physicsData', 'level1');
-    level1.body.static = true;
+    level1.body.static = true;*/
 
     wizball.body.setCircle(15);
     wizball.body.static = true;
